@@ -15,4 +15,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      run: |
+        curl -d '1=2' https://hub.docker.com/api/build/v1/source/1e40e6b5-befb-4938-91bb-50275e773a68/trigger/3b9ac472-e082-46e7-9a9f-de11ef2d4463/call/
+        docker build . --file Dockerfile --tag my-image-name:$(date +%s)
