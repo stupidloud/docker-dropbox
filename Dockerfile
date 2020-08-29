@@ -45,7 +45,7 @@ RUN apt-get update -qq \
 		rm -rf /var/lib/{apt,dpkg,cache,log}/
 
 
-VOLUME ["/home/dropbox/Dropbox"]
+VOLUME ["/root/Dropbox"]
 EXPOSE 17500
 # Try to prevent automatic updates that kills the container
 # See: https://wiki.archlinux.org/index.php/dropbox
