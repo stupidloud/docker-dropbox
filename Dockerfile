@@ -1,53 +1,13 @@
-FROM oddlid/debian-base:buster
-LABEL maintainer="Odd Eivind Ebbesen <odd@oddware.net>"
+FROM debian:latest
 
-#ARG UID=1000
-#ARG GID=1000
-
-RUN apt-get update -qq \
-		&& \
-		apt-get install -y --force-yes --no-install-recommends \
-		gnutls-bin \
-		libglapi-mesa \
-		libglib2.0-0 \
-		libxcb-dri2-0 \
-		libxcb-dri3-0 \
-		libxcb-glx0 \
-		libxcb-present0 \
-		libxcb-sync1 \
-		libxdamage1 \
-		libxshmfence1 \
-		libxxf86vm1 \
-		openssl \
-		python3 \
-		python-matplotlib \
-		&& \
-		ln -sT /etc/ssl /usr/ssl \
-		&& \
-		wget -nv -O /tmp/dropbox.tgz https://www.dropbox.com/download?plat=lnx.x86_64 \
-		&& \
-		tar -xzf /tmp/dropbox.tgz -C /usr/local \
-		&& \
-		mv /usr/local/.dropbox-dist /usr/local/dropbox-dist \
-		&& \
-		ln -s /usr/local/dropbox-dist/dropboxd /usr/local/bin/ \
-		&& \
-		rm -f /tmp/dropbox.tgz \
-		&& \
-		wget -nv -O /usr/local/bin/dropbox-cli https://linux.dropbox.com/packages/dropbox.py \
-		&& \
-		chmod 755 /usr/local/bin/dropbox-cli \
-		&& \
-		apt-get clean autoclean \
-		&& \
-		apt-get autoremove -y \
-		&& \
-		rm -rf /var/lib/{apt,dpkg,cache,log}/
-
-
-VOLUME ["/root/Dropbox"]
 EXPOSE 17500
-# Try to prevent automatic updates that kills the container
-# See: https://wiki.archlinux.org/index.php/dropbox
+EXPOSE 17500/udp
+
+RUN apt update && apt install -y libglib2.0 libglapi-mesa libxext6 libxdamage1 libxcb-glx0 libxcb-dri2-0 libxcb-dri3-0 libxcb-present0 libxcb-sync1 libxshmfence1 libxxf86vm1 wget
+RUN apt-get clean autoclean  && apt-get autoremove -y && rm -rf /var/lib/{apt,dpkg,cache,log}/
+
+RUN cd ~ && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
+RUN wget https://www.dropbox.com/download?dl=packages/dropbox.py -O /usr/local/bin/dropbox.py && chmod +x /usr/local/bin/dropbox.py
+
 RUN install -dm0 ~/.dropbox-dist
-CMD ["dropboxd"]
+CMD ["/root/.dropbox-dist/dropboxd"]
