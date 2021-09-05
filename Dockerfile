@@ -3,7 +3,7 @@ FROM debian:latest
 EXPOSE 17500
 EXPOSE 17500/udp
 
-RUN apt update && apt install -y python python3 libglib2.0-0 libc6 libglapi-mesa libxdamage1 libxfixes3 libxcb-glx0 libxcb-dri2-0 libxcb-dri3-0 libxcb-present0 libxcb-sync1 libxshmfence1 libxxf86vm1
+RUN apt update && apt install -y python python3 libglib2.0-0 libc6 libglapi-mesa libxdamage1 libxfixes3 libxcb-glx0 libxcb-dri2-0 libxcb-dri3-0 libxcb-present0 libxcb-sync1 libxshmfence1 libxxf86vm1 wget
 RUN apt-get clean autoclean  && apt-get autoremove -y && rm -rf /var/lib/{apt,dpkg,cache,log}/
 
 RUN cd ~ && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
